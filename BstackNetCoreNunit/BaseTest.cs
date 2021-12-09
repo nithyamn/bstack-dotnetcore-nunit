@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
+using OpenQA.Selenium.Chrome;
 
 namespace BstackNetCoreNunit
 {
@@ -95,20 +96,23 @@ namespace BstackNetCoreNunit
             //add more caps 
             capability.AddAdditionalCapability("browserstack.debug", "true", true);
             capability.AddAdditionalCapability("browserstack.console", "verbose", true);
-
+            
+           
             if (profile.Equals("local")){
                 capability.AddAdditionalCapability("browserstack.local", "true", true);
-                if(localIdentifier!=null && !localIdentifier.Equals(""))
+                //browserstackOptions.Add("local", "true");
+                if (localIdentifier!=null && !localIdentifier.Equals(""))
                     capability.AddAdditionalCapability("browserstack.localIdentifier", localIdentifier, true);
             }
             else
             {
                 capability.AddAdditionalCapability("browserstack.local", "false", true);
             }
-
+            //capability.AddAdditionalCapability("bstack:options", browserstackOptions);
             driver = new RemoteWebDriver(
               new Uri("https://hub-cloud.browserstack.com/wd/hub/"), capability
             );
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
         }
         [TearDown]
         public void TearDownDriver()

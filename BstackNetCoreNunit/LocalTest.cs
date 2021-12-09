@@ -13,19 +13,26 @@ namespace BstackNetCoreNunit
         [Test]
         public void LocalTestCase()
         {
-            //driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
-            driver.Navigate().GoToUrl("http://localhost:45691/check");
-            System.Threading.Thread.Sleep(5000);
-          
-            if (Regex.IsMatch(driver.PageSource, "Up and running", RegexOptions.IgnoreCase))
+            try
             {
-                ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"passed\", \"reason\": \"Expected\"}}");
-            }
-            else
+                //driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
+                driver.Navigate().GoToUrl("http://localhost:45691/check");
+                System.Threading.Thread.Sleep(5000);
+
+                if (Regex.IsMatch(driver.PageSource, "Up and running", RegexOptions.IgnoreCase))
+                {
+                    ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"passed\", \"reason\": \"Expected\"}}");
+                }
+                else
+                {
+                    ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Unexpected\"}}");
+                }
+                //System.Threading.Thread.Sleep(5000);
+            }catch(Exception e)
             {
-                ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Unexpected\"}}");
+                ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Something went wrong!\"}}");
+                Console.WriteLine(e);
             }
-            //System.Threading.Thread.Sleep(5000);
 
         }
     }

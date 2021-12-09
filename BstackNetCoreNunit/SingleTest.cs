@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using OpenQA.Selenium;
 
@@ -13,24 +14,34 @@ namespace BstackNetCoreNunit
         [Test]
         public void SingleTestCase ()
         {
-            //driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
-            driver.Navigate().GoToUrl("https://www.google.com/ncr");
 
-            IWebElement query = driver.FindElement(By.Name("q"));
-            query.SendKeys("BrowserStack");
-            //query.SendKeys(Keys.Enter);
-            query.Submit();
-            System.Threading.Thread.Sleep(5000);
-            Assert.AreEqual("BrowserStack - Google Search", driver.Title);
-            if (driver.Title.Equals("BrowserStack - Google Search"))
+            try
             {
-                ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"passed\", \"reason\": \"Expected\"}}");
-            }
-            else
+                driver.Navigate().GoToUrl("https://bstackdemo.com/");
+                driver.FindElement(By.Id("signin")).Click();
+                driver.FindElement(By.CssSelector("#username input")).SendKeys("demouser");
+                driver.FindElement(By.CssSelector("#username input")).SendKeys(Keys.Enter);
+                driver.FindElement(By.CssSelector("#password input")).SendKeys("testingisfun99");
+                driver.FindElement(By.CssSelector("#password input")).SendKeys(Keys.Enter);
+
+                driver.FindElement(By.Id("login-btn")).Click();
+                String verifyUser = driver.FindElement(By.ClassName("username")).Text;
+                if (verifyUser.Equals("demouser"))
+                {
+                    ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"passed\", \"reason\": \"Expected\"}}");
+
+                }
+                else
+                {
+                    ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Unexpected\"}}");
+                }
+                System.Threading.Thread.Sleep(5000);
+
+            }catch(Exception e)
             {
-                ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Unexpected\"}}");
+                ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Something went wrong!\"}}");
+                Console.WriteLine(e);
             }
-            //System.Threading.Thread.Sleep(5000);
 
         }
     }
