@@ -16,7 +16,7 @@ Note: Parallel count can also be updated in the `AssemblyInfo.cs` file as `Level
 `[assembly:LevelOfParallelism(3)]`
 
 # Additional notes
-- Use `[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]` for running parallel tests in a isolated and thread safe manner.
+- Use `[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]` along with `Parallelizable` attribute for running parallel tests in a isolated and thread safe manner.
 
 # References
 - https://docs.nunit.org/articles/nunit/writing-tests/attributes/parallelizable.html
