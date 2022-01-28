@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 
 namespace BstackNetCoreNunit
 {
-    [TestFixture("edge","local","local_test", ".NetCore Nunit")]
+    [TestFixture("chrome","local","local_test", ".NetCore Nunit")]
     public class LocalTest : BaseTest
     {
 
