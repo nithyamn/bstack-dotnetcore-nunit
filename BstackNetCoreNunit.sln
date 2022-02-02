@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.808.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BstackNetCoreNunit", "BstackNetCoreNunit\BstackNetCoreNunit.csproj", "{0E5F521B-DB1F-403D-8565-81E9A1C17AE4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0C6C8D4-E644-412F-9B91-565F36F1C216}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
