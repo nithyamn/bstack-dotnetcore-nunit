@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <None Remove="python" />
-    <None Remove="index.html" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.13.2" />
@@ -26,7 +25,4 @@
   </ItemGroup>
 
 
-  <ItemGroup>
-    <Compile Include="index.html" />
-  </ItemGroup>
 </Project>
