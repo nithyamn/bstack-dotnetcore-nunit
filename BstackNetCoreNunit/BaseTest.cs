@@ -51,6 +51,12 @@ namespace BstackNetCoreNunit
         [SetUp]
         public void SetupDriver()
         {
+            var outWriter = new LogWriter("Out", this);
+            var errorWriter = new LogWriter("Error", this);
+            Console.SetOut(outWriter);
+            Console.SetError(errorWriter);
+            Console.WriteLine("Console redirected");
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appSettings.json", false);
@@ -81,7 +87,7 @@ namespace BstackNetCoreNunit
             //if (buildName == null || buildName.Equals(""))
             //    buildName = build; //set via TestFixture value
 
-            Environment.SetEnvironmentVariable("BROWSERSTACK_BUILD_NAME", "azure-" + Environment.GetEnvironmentVariable("BUILD_DEFINITIONNAME") + "-" + Environment.GetEnvironmentVariable("BUILD_BUILDNUMBER"));
+            //Environment.SetEnvironmentVariable("BROWSERSTACK_BUILD_NAME", "azure-" + Environment.GetEnvironmentVariable("BUILD_DEFINITIONNAME") + "-" + Environment.GetEnvironmentVariable("BUILD_BUILDNUMBER"));
             buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
             Console.WriteLine("Env var:"+ buildName);
 
@@ -125,5 +131,6 @@ namespace BstackNetCoreNunit
         {
             driver.Quit();
         }
+
     }
 }
