@@ -32,7 +32,7 @@ namespace BstackNetCoreNunit
         String username;
         String accessKey;
         String buildName;
-        public IWebDriver driver;
+        public RemoteWebDriver driver;
        
 
         public String platform;
@@ -70,16 +70,18 @@ namespace BstackNetCoreNunit
 
 
             username = credentials.Username;
-            if (username.Equals("BROWSERSTACK_USERNAME"))
-                username = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
+            //if (username.Equals("BROWSERSTACK_USERNAME"))
+            //    username = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
          
             accessKey = credentials.AccessKey;
-            if (accessKey.Equals("BROWSERSTACK_ACCESS_KEY"))
-                accessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
-          
-            buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
-            if (buildName == null || buildName.Equals(""))
-                buildName = build; //set via TestFixture value
+            //if (accessKey.Equals("BROWSERSTACK_ACCESS_KEY"))
+            //    accessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
+
+            //buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
+            //if (buildName == null || buildName.Equals(""))
+            //    buildName = build; //set via TestFixture value
+
+            Environment.SetEnvironmentVariable("BROWSERSTACK_BUILD_NAME", "azure-" + Environment.GetEnvironmentVariable("BUILD_DEFINITIONNAME") + "-" + Environment.GetEnvironmentVariable("BUILD_BUILDNUMBER"));
 
             String localIdentifier = Environment.GetEnvironmentVariable("BROWSERSTACK_LOCAL_IDENTIFIER");
 
@@ -96,6 +98,8 @@ namespace BstackNetCoreNunit
             //add more caps 
             capability.AddAdditionalCapability("browserstack.debug", "true", true);
             capability.AddAdditionalCapability("browserstack.console", "verbose", true);
+
+
             
            
             if (profile.Equals("local")){

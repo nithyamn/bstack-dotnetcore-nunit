@@ -36,8 +36,11 @@ namespace BstackNetCoreNunit
                     ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Unexpected\"}}");
                 }
                 System.Threading.Thread.Sleep(5000);
+                SessionDetails sessionDetails = new SessionDetails();
+                sessionDetails.GetDetails(driver.SessionId.ToString());
 
-            }catch(Exception e)
+            }
+            catch(Exception e)
             {
                 ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Something went wrong!\"}}");
                 Console.WriteLine(e);
