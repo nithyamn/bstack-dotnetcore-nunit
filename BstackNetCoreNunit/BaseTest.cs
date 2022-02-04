@@ -70,12 +70,12 @@ namespace BstackNetCoreNunit
 
 
             username = credentials.Username;
-            //if (username.Equals("BROWSERSTACK_USERNAME"))
-            //    username = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
-         
+            if (username.Equals("BROWSERSTACK_USERNAME"))
+                username = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
+
             accessKey = credentials.AccessKey;
-            //if (accessKey.Equals("BROWSERSTACK_ACCESS_KEY"))
-            //    accessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
+            if (accessKey.Equals("BROWSERSTACK_ACCESS_KEY"))
+                accessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
 
             //buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
             //if (buildName == null || buildName.Equals(""))
