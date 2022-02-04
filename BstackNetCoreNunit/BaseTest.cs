@@ -51,12 +51,6 @@ namespace BstackNetCoreNunit
         [SetUp]
         public void SetupDriver()
         {
-            var outWriter = new LogWriter("Out", this);
-            var errorWriter = new LogWriter("Error", this);
-            Console.SetOut(outWriter);
-            Console.SetError(errorWriter);
-            Console.WriteLine("Console redirected");
-
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appSettings.json", false);
