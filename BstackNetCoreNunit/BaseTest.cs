@@ -82,7 +82,7 @@ namespace BstackNetCoreNunit
             //    buildName = build; //set via TestFixture value
 
             Environment.SetEnvironmentVariable("BROWSERSTACK_BUILD_NAME", "azure-" + Environment.GetEnvironmentVariable("BUILD_DEFINITIONNAME") + "-" + Environment.GetEnvironmentVariable("BUILD_BUILDNUMBER"));
-            buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
+            buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
             Console.WriteLine("Env var:"+ buildName);
 
             String localIdentifier = Environment.GetEnvironmentVariable("BROWSERSTACK_LOCAL_IDENTIFIER");
