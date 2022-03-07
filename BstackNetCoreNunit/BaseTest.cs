@@ -136,7 +136,7 @@ namespace BstackNetCoreNunit
             }
             else
             {
-                if(browser!=null || browserVersion!=null && os!=null || osVersion != null)
+                if(browser!=null && os!=null)
                 {
                     browserstackOptions.Add("osVersion", osVersion);
                     browserstackOptions.Add("browser", browser);
