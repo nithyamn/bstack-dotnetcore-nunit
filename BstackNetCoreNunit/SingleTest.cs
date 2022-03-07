@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 
 namespace BstackNetCoreNunit
 {
-    [TestFixture("firefox","single","single_test",".NetCore Nunit")]
+    [TestFixture("iPhone", "single","single_test",".NetCore Nunit")]
     public class SingleTest : BaseTest
     {
 

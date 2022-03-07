@@ -4,12 +4,10 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Specialized;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.IO;
-using OpenQA.Selenium.Chrome;
+using BrowserStack;
+
 
 namespace BstackNetCoreNunit
 {
@@ -26,19 +24,22 @@ namespace BstackNetCoreNunit
         public string Browser_Version { get; set; }
         public string Device { get; set; }
     }
-    
+   
     public class BaseTest
     {
         String username;
         String accessKey;
         String buildName;
         public RemoteWebDriver driver;
-       
+        //String localIdentifier = "sample123";
+
+
 
         public String platform;
         public String profile;
         public String session_name;
         public String build;
+        public static Local local;
 
         public BaseTest(String platform, String profile, String session_name, String build)
         {
@@ -46,6 +47,20 @@ namespace BstackNetCoreNunit
             this.profile = profile;
             this.session_name = session_name;
             this.build = build;
+        }
+
+        //[OneTimeSetUp]
+        public static void startLocal()
+        {
+            local = new Local();
+            List<KeyValuePair<string, string>> bsLocalArgs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("key", Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY")),
+                new KeyValuePair<string, string>("binarypath", "/Users/nithyamani/Desktop/Tools/LocalBinaries/BrowserStackLocal8.5")
+                //new KeyValuePair<string, string>("localIdentifier", "sample123")
+
+            };
+            local.start(bsLocalArgs);
+            Console.WriteLine("LOCAL started: " + local.isRunning());
         }
 
         [SetUp]
@@ -77,43 +92,69 @@ namespace BstackNetCoreNunit
             if (accessKey.Equals("BROWSERSTACK_ACCESS_KEY"))
                 accessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
 
-            //buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
-            //if (buildName == null || buildName.Equals(""))
-            //    buildName = build; //set via TestFixture value
-
-            //Environment.SetEnvironmentVariable("BROWSERSTACK_BUILD_NAME", "azure-" + Environment.GetEnvironmentVariable("BUILD_DEFINITIONNAME") + "-" + Environment.GetEnvironmentVariable("BUILD_BUILDNUMBER"));
             buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
-            Console.WriteLine("Env var:"+ buildName);
+            if (buildName == null || buildName.Equals(""))
+                buildName = build; //set via TestFixture value
+            Console.WriteLine(username + " " + accessKey);
+            //Environment.SetEnvironmentVariable("BROWSERSTACK_BUILD_NAME", "azure-" + Environment.GetEnvironmentVariable("BUILD_DEFINITIONNAME") + "-" + Environment.GetEnvironmentVariable("BUILD_BUILDNUMBER"));
+            //buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
+            //Console.WriteLine("Env var:"+ buildName);
 
             String localIdentifier = Environment.GetEnvironmentVariable("BROWSERSTACK_LOCAL_IDENTIFIER");
-
-            OpenQA.Selenium.Chrome.ChromeOptions capability = new OpenQA.Selenium.Chrome.ChromeOptions();
-            capability.AddAdditionalCapability("os_version", platforms.OS_Version, true);
-            capability.AddAdditionalCapability("browser", platforms.Browser, true);
-            capability.AddAdditionalCapability("browser_version", platforms.Browser_Version, true);
-            capability.AddAdditionalCapability("os", platforms.OS, true);
-            capability.AddAdditionalCapability("device", platforms.Device, true);
-            capability.AddAdditionalCapability("build", buildName, true); 
-            capability.AddAdditionalCapability("name", session_name, true); 
-            capability.AddAdditionalCapability("browserstack.user", username, true);
-            capability.AddAdditionalCapability("browserstack.key", accessKey, true);
-            //add more caps 
-            capability.AddAdditionalCapability("browserstack.debug", "true", true);
-            capability.AddAdditionalCapability("browserstack.console", "verbose", true);
-
-
             
            
-            if (profile.Equals("local")){
-                capability.AddAdditionalCapability("browserstack.local", "true", true);
-                //browserstackOptions.Add("local", "true");
-                if (localIdentifier!=null && !localIdentifier.Equals(""))
-                    capability.AddAdditionalCapability("browserstack.localIdentifier", localIdentifier, true);
+
+            OpenQA.Selenium.Chrome.ChromeOptions capability = new OpenQA.Selenium.Chrome.ChromeOptions();
+            Dictionary<string, object> browserstackOptions = new Dictionary<string, object>();
+            String deviceName = Environment.GetEnvironmentVariable("deviceName");
+            String osVersion = Environment.GetEnvironmentVariable("osVersion");
+
+
+            browserstackOptions.Add("buildName", buildName);
+            browserstackOptions.Add("sessionName", session_name);
+            browserstackOptions.Add("userName", username);
+            browserstackOptions.Add("accessKey", accessKey);
+
+            if(platforms.Device != null)
+            {
+                /*if(deviceName!=null && osVersion != null)
+                {
+                    browserstackOptions.Add("deviceName", deviceName);
+                    browserstackOptions.Add("osVersion", osVersion);
+                }
+                else
+                {
+                    browserstackOptions.Add("deviceName", platforms.Device);
+                    browserstackOptions.Add("osVersion", platforms.OS_Version);
+                }*/
+                browserstackOptions.Add("deviceName", deviceName);
+                browserstackOptions.Add("osVersion", osVersion);
+                browserstackOptions.Add("realMobile", "true");
             }
             else
             {
-                capability.AddAdditionalCapability("browserstack.local", "false", true);
+                browserstackOptions.Add("osVersion", platforms.OS_Version);
+                browserstackOptions.Add("browser", platforms.Browser);
+                browserstackOptions.Add("browserVersion", platforms.Browser_Version);
+                browserstackOptions.Add("os", platforms.OS);
             }
+            //add more caps 
+            browserstackOptions.Add("debug", "true");
+            browserstackOptions.Add("consoleLogs", "verbose");
+
+            if (profile.Equals("local")){
+                startLocal ();
+                browserstackOptions.Add("local", "true");
+               
+                if (localIdentifier!=null && !localIdentifier.Equals(""))
+                    browserstackOptions.Add("localIdentifier", localIdentifier);
+            }
+            else
+            {
+                browserstackOptions.Add("local", "false");
+            }
+            capability.AddAdditionalOption("bstack:options", browserstackOptions);
+            Console.WriteLine(capability);
             //capability.AddAdditionalCapability("bstack:options", browserstackOptions);
             driver = new RemoteWebDriver(
               new Uri("https://hub-cloud.browserstack.com/wd/hub/"), capability
@@ -124,7 +165,15 @@ namespace BstackNetCoreNunit
         public void TearDownDriver()
         {
             driver.Quit();
+            if (profile.Equals("local"))
+                stopLocal();
         }
 
+        //[OneTimeTearDown]
+
+        public static void stopLocal()
+        {
+            local.stop();
+        }
     }
 }

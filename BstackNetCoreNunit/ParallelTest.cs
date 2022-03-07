@@ -10,7 +10,9 @@ namespace BstackNetCoreNunit
     [TestFixture("edge", "parallel", "parallel_edge", ".NetCore Nunit")]
     [TestFixture("safari", "parallel", "parallel_safari", ".NetCore Nunit")]
     [TestFixture("pixel", "parallel", "parallel_pixel", ".NetCore Nunit")]
-    [TestFixture("iPhone", "parallel","parallel_iPhone", ".NetCore Nunit")]
+    [TestFixture("iPhone", "parallel", "parallel_iPhone", ".NetCore Nunit")]
+
+
     [FixtureLifeCycle(LifeCycle.InstancePerTestCase)] //A new instance is created for each test case. Makes the tests thread safe.
     [Parallelizable(ParallelScope.Fixtures)] //Run test fixtures in parallel
     //[Parallelizable(ParallelScope.Children)] // Run the child tests in parallel
@@ -22,7 +24,7 @@ namespace BstackNetCoreNunit
 
         [Test]
         public void ParallelTestCase1()
-        {
+        { 
             try
             {
                 driver.Navigate().GoToUrl("https://bstackdemo.com/");
@@ -44,13 +46,14 @@ namespace BstackNetCoreNunit
                     ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Unexpected\"}}");
                 }
                 System.Threading.Thread.Sleep(5000);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Something went wrong!\"}}");
                 Console.WriteLine(e);
             }
         }
-        [Test]
+        //[Test]
         public void ParallelTestCase2()
         {
             driver.Navigate().GoToUrl("https://bstackdemo.com/");
