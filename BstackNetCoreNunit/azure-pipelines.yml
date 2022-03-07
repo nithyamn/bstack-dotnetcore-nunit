@@ -20,8 +20,8 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      echo $deviceName
-      echo $osVersion
+      echo $DEVICENAME
+      echo $OSVERSION
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
