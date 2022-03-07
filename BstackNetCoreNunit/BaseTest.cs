@@ -108,6 +108,9 @@ namespace BstackNetCoreNunit
             Dictionary<string, object> browserstackOptions = new Dictionary<string, object>();
             String deviceName = Environment.GetEnvironmentVariable("DEVICENAME");
             String osVersion = Environment.GetEnvironmentVariable("OSVERSION");
+            String os = Environment.GetEnvironmentVariable("OS");
+            String browser = Environment.GetEnvironmentVariable("BROWSER");
+            String browserVersion = Environment.GetEnvironmentVariable("BROWSERVERSION");
 
 
             browserstackOptions.Add("buildName", buildName);
@@ -117,7 +120,7 @@ namespace BstackNetCoreNunit
 
             if(platforms.Device != null)
             {
-                /*if(deviceName!=null && osVersion != null)
+                if(deviceName!=null && osVersion != null)
                 {
                     browserstackOptions.Add("deviceName", deviceName);
                     browserstackOptions.Add("osVersion", osVersion);
@@ -126,17 +129,28 @@ namespace BstackNetCoreNunit
                 {
                     browserstackOptions.Add("deviceName", platforms.Device);
                     browserstackOptions.Add("osVersion", platforms.OS_Version);
-                }*/
-                browserstackOptions.Add("deviceName", deviceName);
-                browserstackOptions.Add("osVersion", osVersion);
-                browserstackOptions.Add("realMobile", "true");
+                }
+                //browserstackOptions.Add("deviceName", deviceName);
+                //browserstackOptions.Add("osVersion", osVersion);
+                //browserstackOptions.Add("realMobile", "true");
             }
             else
             {
-                browserstackOptions.Add("osVersion", platforms.OS_Version);
-                browserstackOptions.Add("browser", platforms.Browser);
-                browserstackOptions.Add("browserVersion", platforms.Browser_Version);
-                browserstackOptions.Add("os", platforms.OS);
+                if(browser!=null || browserVersion!=null && os!=null || osVersion != null)
+                {
+                    browserstackOptions.Add("osVersion", osVersion);
+                    browserstackOptions.Add("browser", browser);
+                    browserstackOptions.Add("browserVersion", browserVersion);
+                    browserstackOptions.Add("os", os);
+                }
+                else
+                {
+                    browserstackOptions.Add("osVersion", platforms.OS_Version);
+                    browserstackOptions.Add("browser", platforms.Browser);
+                    browserstackOptions.Add("browserVersion", platforms.Browser_Version);
+                    browserstackOptions.Add("os", platforms.OS);
+                }
+               
             }
             //add more caps 
             browserstackOptions.Add("debug", "true");
