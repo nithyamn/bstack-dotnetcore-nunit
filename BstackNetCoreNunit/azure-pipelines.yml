@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- selenium-4
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: BrowserStackConfig@0
+  inputs:
+    BrowserStackServiceEndPoint: 'bstack-conn'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo $deviceName
+      echo $osVersion
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    arguments: '--filter "SingleTest"'
