@@ -106,8 +106,8 @@ namespace BstackNetCoreNunit
 
             OpenQA.Selenium.Chrome.ChromeOptions capability = new OpenQA.Selenium.Chrome.ChromeOptions();
             Dictionary<string, object> browserstackOptions = new Dictionary<string, object>();
-            String deviceName = Environment.GetEnvironmentVariable("deviceName");
-            String osVersion = Environment.GetEnvironmentVariable("osVersion");
+            String deviceName = Environment.GetEnvironmentVariable("DEVICENAME");
+            String osVersion = Environment.GetEnvironmentVariable("OSVERSION");
 
 
             browserstackOptions.Add("buildName", buildName);
