@@ -120,7 +120,7 @@ namespace BstackNetCoreNunit
 
             if(platforms.Device != null)
             {
-                if(deviceName!=null && osVersion != null)
+                if(deviceName!=null && osVersion != null && browserVersion!=null && os!=null)
                 {
                     browserstackOptions.Add("deviceName", deviceName);
                     browserstackOptions.Add("osVersion", osVersion);
