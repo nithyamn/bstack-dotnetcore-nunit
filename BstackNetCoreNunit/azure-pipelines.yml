@@ -22,6 +22,9 @@ steps:
     script: |
       echo $DEVICENAME
       echo $OSVERSION
+      echo $OS
+      echo $BROWSER
+      echo $BROWSERVERSION
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
