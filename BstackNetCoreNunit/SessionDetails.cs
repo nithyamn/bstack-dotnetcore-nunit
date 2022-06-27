@@ -19,7 +19,7 @@ namespace BstackNetCoreNunit
 
             var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
-            httpRequest.Headers["Authorization"] = "Basic bml0aHlhbWFuaTM6UHN1cnFDNm82TXBoQk54eXBoVXk=";
+            httpRequest.Headers["Authorization"] = "";
 
 
             var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
